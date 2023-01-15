@@ -25,4 +25,12 @@ class CourseService(val courseRepository: CourseRepository) {
             CourseDTO(it.id, it.name, it.category)
         }
     }
+
+    fun retrieveAllCourses(): List<CourseDTO> {
+        return courseRepository.findAll()
+            .map {
+                // Need a CourseDTO from Course Entity
+                CourseDTO(it.id, it.name, it.category)
+            }
+    }
 }
