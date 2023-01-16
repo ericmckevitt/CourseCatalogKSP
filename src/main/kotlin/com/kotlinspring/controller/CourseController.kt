@@ -1,6 +1,7 @@
 package com.kotlinspring.controller
 
 import com.kotlinspring.dto.CourseDTO
+import com.kotlinspring.entity.Course
 import com.kotlinspring.service.CourseService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -17,4 +18,9 @@ class CourseController(val courseService: CourseService) {
 
     @GetMapping()
     fun retrieveAllCourses(): List<CourseDTO> = courseService.retrieveAllCourses()
+
+    @PutMapping("/{course_id}")
+    fun updateCourse(@RequestBody courseDTO: CourseDTO,
+                     @PathVariable("course_id") courseId: Int)
+    = courseService.updateCourse(courseId, courseDTO)
 }
