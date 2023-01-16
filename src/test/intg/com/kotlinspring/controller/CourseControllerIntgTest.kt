@@ -74,4 +74,44 @@ class CourseControllerIntgTest {
         println("courseDTOs: $courseDTOs")
         assertEquals(3, courseDTOs!!.size)
     }
+
+    @Test
+    fun updateCourse() {
+        // Create a course and save it to DB
+        val course = Course(null,
+            "Build Restful APIs using SpringBoot and Kotlin", "Development")
+        courseRepository.save(course)
+
+        // Create a new course to update it with
+        val updatedCourseDTO = CourseDTO(null,
+            "Build Restful APIs using SpringBoot and Kotlin1", "Development")
+
+        // perform PUT req and store response
+        val updatedCourse = webTestClient
+            .put()
+            .uri("/v1/courses/{courseId}", course.id)
+            .bodyValue(updatedCourseDTO)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals("Build Restful APIs using SpringBoot and Kotlin1", updatedCourse!!.name)
+    }
+
+    @Test
+    fun deleteCourse() {
+        // Create a course and save it to DB
+        val course = Course(null,
+            "Build Restful APIs using SpringBoot and Kotlin", "Development")
+        courseRepository.save(course)
+
+        // perform DELETE req and ensure isNoContent status
+        val updatedCourse = webTestClient
+            .delete()
+            .uri("/v1/courses/{courseId}", course.id)
+            .exchange()
+            .expectStatus().isNoContent
+    }
 }
