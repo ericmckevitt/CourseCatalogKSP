@@ -27,8 +27,14 @@ class CourseService(val courseRepository: CourseRepository) {
         }
     }
 
-    fun retrieveAllCourses(): List<CourseDTO> {
-        return courseRepository.findAll()
+    fun retrieveAllCourses(courseName: String?): List<CourseDTO> {
+
+        // if courseName is null, then courses = cr.findAll()
+        val courses = courseName?.let {
+            courseRepository.findCoursesByName(courseName)
+        } ?: courseRepository.findAll()
+
+        return courses
             .map {
                 // Need a CourseDTO from Course Entity
                 CourseDTO(it.id, it.name, it.category)
