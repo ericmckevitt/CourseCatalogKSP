@@ -56,6 +56,27 @@ class CourseControllerUnitTest {
     }
 
     @Test
+    fun addCourse_validation() {
+
+        // Build CourseDTO to pass to the POST endpoint
+        val courseDTO = CourseDTO(
+            null,
+            "",
+            ""
+        )
+
+        every { courseServiceMockk.addCourse(any()) } returns courseDTO(id = 1)
+
+        // Perform the POST request
+        val savedCourseDTO = webTestClient
+            .post()
+            .uri("/v1/courses")
+            .bodyValue(courseDTO)
+            .exchange()
+            .expectStatus().isBadRequest
+    }
+
+    @Test
     fun retrieveAllCourses() {
 
         // use returnsMany() because GET all returns List (Collection) of Courses
