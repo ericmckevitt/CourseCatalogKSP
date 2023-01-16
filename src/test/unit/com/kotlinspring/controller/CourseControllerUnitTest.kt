@@ -84,6 +84,34 @@ class CourseControllerUnitTest {
     }
 
     @Test
+    fun addCourse_runtimeException() {
+
+        // Build CourseDTO to pass to the POST endpoint
+        val courseDTO = CourseDTO(
+            null,
+            "Building Restful APIs using SpringBoot and Kotlin",
+            "Dilip Sundarraj"
+        )
+
+        val errorMessage = "Unexpected Error occurred"
+
+        every { courseServiceMockk.addCourse(any()) } throws RuntimeException(errorMessage)
+
+        // Perform the POST request
+        val response = webTestClient
+            .post()
+            .uri("/v1/courses")
+            .bodyValue(courseDTO)
+            .exchange()
+            .expectStatus().is5xxServerError
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals(errorMessage, response)
+    }
+
+    @Test
     fun retrieveAllCourses() {
 
         // use returnsMany() because GET all returns List (Collection) of Courses
