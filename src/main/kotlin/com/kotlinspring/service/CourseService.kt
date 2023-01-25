@@ -40,7 +40,7 @@ class CourseService(
 
     fun retrieveAllCourses(courseName: String?): List<CourseDTO> {
 
-        // if courseName is null, then courses = cr.findAll()
+        // if courseName is null, then courses = findAll()
         val courses = courseName?.let {
             courseRepository.findCoursesByName(courseName)
         } ?: courseRepository.findAll()
